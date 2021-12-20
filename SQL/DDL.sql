@@ -32,7 +32,7 @@ CREATE TABLE bookstore_user (
 
 -- Create the book relation
 CREATE TABLE book (
-    ISBN varchar(13),
+    ISBN varchar(15),
     book_name varchar(40),
     author_name varchar(40),
     genre varchar(20),
@@ -61,6 +61,17 @@ CREATE TABLE publisher (
 );
 
 
+-- Create phone relation
+CREATE TABLE publisher_phone (
+    publisher_name varchar(40),
+    phone_number varchar(40),
+
+    PRIMARY KEY (publisher_name, phone_number),
+    CONSTRAINT fk_publisher_phone FOREIGN KEY (publisher_name) REFERENCES publisher
+);
+
+
+
 -- Create the review relation
 CREATE TABLE review (
     ID SERIAL,
@@ -74,7 +85,7 @@ CREATE TABLE review (
 -- Create the orders relation
 CREATE TABLE orders (
     username varchar(30),
-    ISBN varchar(13),
+    ISBN varchar(15),
     tracking_number SERIAL,
     order_location varchar(30),
     date_ordered date,
@@ -101,7 +112,7 @@ CREATE TABLE orders (
 -- Create the selects relation
 CREATE TABLE selects (
     username varchar(30),
-    ISBN varchar(13),
+    ISBN varchar(15),
     quantity INTEGER,
 
     PRIMARY KEY (username, ISBN),
@@ -113,13 +124,14 @@ CREATE TABLE selects (
 -- Create the supplies relation
 CREATE TABLE supplies (
     publisher_name varchar(40),
-    ISBN varchar(13),
-    number_in_stock INTEGER,
+    ISBN varchar(15),
+    number_in_stock INTEGER,            -- Number currently in stock
     price NUMERIC,
     publisher_percentage NUMERIC,
-    number_sold INTEGER,
-    total_number_purchased INTEGER,
+    number_sold INTEGER,                -- Number sold historically
+    total_number_purchased INTEGER,     -- Number purchased historically
 
+    PRIMARY KEY (publisher_name, ISBN),
     CONSTRAINT fk_publisher_name FOREIGN KEY (publisher_name) REFERENCES publisher,
     CONSTRAINT fk_ISBN FOREIGN KEY (ISBN) REFERENCES book
 );
@@ -129,7 +141,7 @@ CREATE TABLE supplies (
 CREATE TABLE rates (
     ID INTEGER,
     username varchar(30),
-    ISBN varchar(13),
+    ISBN varchar(15),
 
     CONSTRAINT fk_id FOREIGN KEY (ID) REFERENCES review,
     CONSTRAINT fk_username FOREIGN KEY (username) REFERENCES bookstore_user,
